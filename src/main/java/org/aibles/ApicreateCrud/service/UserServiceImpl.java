@@ -11,14 +11,9 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+     @Autowired
+    private  UserRepository userRepository;
 
-
-    private final UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public User createUser(UserCreationRequest request) {
@@ -31,13 +26,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(String userId, UserUpdatedRequest request) {
         User user = getUser(userId);
-        user.setUsername(request.getPassword());
+        user.setPassword(request.getPassword());
         return userRepository.save(user);
     }
 
     @Override
     public User getUser(String userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException(" User not found "));
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException(" User not found "));
     }
 
     @Override
